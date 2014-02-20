@@ -6,7 +6,7 @@ id text,
 style text ) 
 SERVER file_fdw_server 
 OPTIONS (format 'csv', header 'true', 
-filename :styles,
+filename :'styles',
 delimiter ',', null '');
 
 drop foreign table :kml.stylemaps;
@@ -17,7 +17,7 @@ highlight text
 ) 
 SERVER file_fdw_server 
 OPTIONS (format 'csv', header 'true', 
-filename :stylemaps,
+filename :'stylemaps',
 delimiter ',', null '');
 
 

@@ -15,6 +15,6 @@ schema:=kml
 
 db/kml:
 	${PG} --variable=kml="${schema}" -f kml.sql
-	${PG} --variable=kml="${schema}" --variable=styles="'${pwd}/styles.csv'" --variable=stylemaps="'${pwd}/stylemaps.csv'" -f styles.sql
+	${PG} --variable=kml="${schema}" --variable=styles="${pwd}/styles.csv" --variable=stylemaps="${pwd}/stylemaps.csv" -f styles.sql
 
 

@@ -8,28 +8,36 @@ endif
 
 modis.mk:=1
 
-years:=2010 2011 2012
+years:=2011 2012 2013
 months:=01 02 03 04 05 06 07 08 09 10 11 12
 ymd:=$(foreach y,${years},$(patsubst %,$y-%-01,${months}))
 #ymd:=2012-06-01 2012-07-01
-ftp:=ftp://e4ftl01.cr.usgs.gov/MODIS_Composites/MOTA
+#ftp:=http://e4ftl01.cr.usgs.gov/MODIS_Composites/MOTA
+ftp:=http://e4ftl01.cr.usgs.gov/MOTA
 mod:=MCD45A1
 ver:=005
-scenes:=h12v11 h13v11 h13v10
+scenes:=h12v10 h12v11 h13v11 h13v10
 
 .PHONY:${mod}
 define GETMOD
+
+.PHONY:${mod}/$2
+${mod}/$2::${mod}/$2/${mod}.$1.hdf
 
 ${mod}::${mod}/$2/${mod}.$1.hdf
 #	yjd=`date --date=${ymd} +%Y%j`;
 ${mod}/$2/${mod}.$1.hdf:
 	[[ -d $$(dir $$@) ]] || mkdir -p $$(dir $$@)
-	file=`curl -l ${ftp}/${mod}.${ver}/$2/ | grep '$1.*.hdf$$$$'`; \
-	if [[ -n $$$$file ]]; then \
-	  curl --output $$@ ${ftp}/${mod}.${ver}/$2/$$$$file; \
-	fi
+	file=`curl -q  ${ftp}/${mod}.${ver}/$2/ | sed -e 's/<img[^>]*>//g' -e 's/<.DOCTYPE[^>]*>//' -e 's/<hr[^>]*>//g' | xmlstarlet sel -t -v //a[@href] | grep '$1.*\.hdf$$$$'`; \
+	if [[ -z $$$$file ]]; then \
+	  echo "File for ${mod}/$2/${mod}.$1.hdf" not found; \
+	  exit; \
+	fi; \
+	if [[ -n ${mod}/$2/$$$$file ]]; then \
+	  curl --output ${mod}/$2/$$$$file ${ftp}/${mod}.${ver}/$2/$$$$file; \
+	fi; \
+	ln ${mod}/$2/$$$$file $$@;
 endef 
-#/${mod}.A${y}${jd}.$1.${ver}.$NUM.hdf
 
 $(foreach d,${ymd},$(foreach s,$(scenes),$(eval $(call GETMOD,$s,$(subst -,.,$d)))))
 
@@ -39,6 +47,9 @@ ifeq (${MAPSET},${mod})
 
 .PHONY:${mod}
 define INMOD
+.PHONY:${mod}/$1.$2
+${mod}/$1.$2::${rast}/$1.$2
+${mod}/$2::${rast}/$1.$2
 ${mod}::${rast}/$1.$2
 ${rast}/$1.$2:${mod}/$2/${mod}.$1.hdf
 	r.in.gdal -o input=HDF4_EOS:EOS_GRID:"$$<":MOD_GRID_Monthly_500km_BA:burndate output=$$(notdir $$@) || true

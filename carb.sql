@@ -44,14 +44,13 @@ from
 where val=1;
 $$ LANGUAGE 'SQL';
 
--- for t in h12v11 h13v11 h13v10; do g.region rast=${t}.2011.01.01; files=$(g.mlist separator=',' type=rast pattern=${t}.*); psql -t -F' ' -A -P footer -d sugarcane -c "\set search_path=carb,public; select * from carb.rwhatinput('${t}')" | r.what input=${files} null='' | grep -v '||||' | tr '|' ',' | sed -e "s/${t},/${t},\"{/" -e 's/$/}"/'; done > burn_pixels.csv 
-
 create table field_modis_pixels (
        field_modis_pixel_id serial primary key,
        x float,
        y float,
        field_id text references fields(field_id),
        modis_id varchar(8) references modis.templates(modis_id),
+       year integer,
        c integer,
        r integer,
        vals integer[]
@@ -60,29 +59,24 @@ create table field_modis_pixels (
 -- \COPY field_modis_pixels (x,y,field_id,c,r,modis_id,vals) from burn_pixels.csv WITH CSV
 
 create or replace view field_modis_pixel_burns as 
-with field_modis_pixel_all_burn_days as (
-select field_modis_pixel_id,year,julian from 
-( select field_modis_pixel_id,2010 as year,unnest(vals[1:12]) as julian 
-  from field_modis_pixels
-) as p where julian >0 and julian < 366
-union
-select field_modis_pixel_id,year,julian from 
-( select field_modis_pixel_id,2011 as year,unnest(vals[13:24]) as julian 
-  from field_modis_pixels
-) as p where julian >0 and julian < 366
-union
-select field_modis_pixel_id,year,julian from 
-( select field_modis_pixel_id,2012 as year,unnest(vals[25:36]) as julian 
-  from field_modis_pixels
-) as p where julian >0 and julian < 366)
-select distinct b.* from field_modis_pixel_all_burn_days b 
-left join 
-(select distinct b2.* 
+with j as (
+ select field_modis_pixel_id,year,unnest(vals[1:12]) as julian
+ from field_modis_pixels
+),
+field_modis_pixel_all_burn_days as (
+ select field_modis_pixel_id,year,julian
+ from j
+ where julian >0 and julian < 366
+),
+double as (
+ select distinct b2.* 
  from field_modis_pixel_all_burn_days b1 
  join field_modis_pixel_all_burn_days b2 
  using (field_modis_pixel_id,year) 
  where b1.julian < b2.julian and b2.julian-b1.julian <30
-) as double 
+)
+select distinct b.* from field_modis_pixel_all_burn_days b 
+left join double
 using (field_modis_pixel_id,year,julian) 
 where double is null 
 order by field_modis_pixel_id,julian;
@@ -94,12 +88,12 @@ array_agg(cumulative) as cumulative,
 max(cumulative) as total 
 from 
 (
-  select field_id,year,julian,count(*) as count,
-  sum(count(*)) over (partition by field_id,year order by julian) as cumulative
-  from field_modis_pixel_burns 
-  join field_modis_pixels 
+  select field_id,p.year,julian,count(*) as count,
+  sum(count(*)) over (partition by field_id,p.year order by julian) as cumulative
+  from field_modis_pixel_burns b 
+  join field_modis_pixels p 
   using (field_modis_pixel_id) 
-  group by field_id,year,julian
+  group by field_id,p.year,julian
 ) as bd
 group by field_id,year order by field_id,year,julian;
 
@@ -126,7 +120,6 @@ select field_id,modis_ids,pixels,pixels*21.466 as hectares,boundary from
 counts 
 join bounds
 using (field_id);
-
 
 create or replace view kml_input as 
 select 
@@ -175,11 +168,11 @@ WITH y as (
   hstore('col','MCD45A1 Column')||hstore('row','MCD45A1 Row')||
   hstore('modis_id','MCD45A1 Tile')||
   hstore('julian','Julian Day')),E'\n'),
-  year::text,'Burned MCD45A1 pixels for ' || year) as f
+  p.year::text,'Burned MCD45A1 pixels for ' || p.year) as f
  from field_modis_pixel_burns 
- join field_modis_pixels using (field_modis_pixel_id) 
+ join field_modis_pixels p using (field_modis_pixel_id) 
  join modis.templates using (modis_id) 
- group by year)
+ group by p.year)
  select kml.feature('Folder',string_agg(f,E'\n'),
        'Burned Pixels','Burned MCD45A1 Pixels arranged by year') as folder
  from y;
@@ -189,8 +182,10 @@ WITH y as (
  select kml.feature('Folder',
  string_agg(kml.feature('Placemark',st_asKML(f.boundary),
  field_id,'','fieldBurn',
- hstore('field_id',field_id)||hstore('modis_id',array_to_string(f.modis_ids,', '))||
- hstore('pixels',f.pixels::text)||hstore('hectares',f.hectares::decimal(10,2)::text)||  
+ hstore('field_id',field_id)||
+ hstore('modis_id',array_to_string(f.modis_ids,', '))||
+ hstore('pixels',f.pixels::text)||
+ hstore('hectares',f.hectares::decimal(10,2)::text)||  
  hstore('burned_fraction',(1.0*b.total/pixels)::decimal(6,2)::text)||
  hstore('year',year::text)||hstore('days',array_to_string(b.julian,','))||
  hstore('count',array_to_string(b.count,','))||
@@ -213,25 +208,25 @@ WITH y as (
         'Burned Fields','Burned Field Summary arranged by year') as folder
  from y;
 
-create or replace view kml_sugarcane as 
-with kml_processing as (
-     select kml.feature('Folder',string_agg(folder,E'\n'),
+create or replace view carb.kml_results as 
+select kml.feature('Folder',string_agg(folder,E'\n'),
      'MCD45A1','MCD45A1 MODIS Burned Pixel Product processing output') 
      as folder
-     from (select folder from kml_pixels 
-     union
-     select folder from kml_burned
-     union 
-     select folder from kml_rasterized) as o
-)
+from (select folder from carb.kml_pixels 
+union
+select folder from carb.kml_burned
+union 
+select folder from carb.kml_rasterized) as o;
+
+create or replace view carb.kml_sugarcane as 
 select kml.feature('Document',kml.style_part()||string_agg(folder,E'\n'),
 'Sugarcane Example',
 'This example shows the use of MODIS Burned area pixels 
  to determine the mechanized harvesting for the CARB sugarcane ethanol') as doc
 from (
-select folder from kml_input
+select folder from carb.kml_input
 union
-select folder from kml_processing) as f;
+select folder from carb.kml_results) as f;
 
 --\copy (select kml.file(doc) from kml_sugarcane) to sugarcane.kml CSV QUOTE '|'
 

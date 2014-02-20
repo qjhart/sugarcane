@@ -1,23 +1,21 @@
 #! /usr/bin/make -f 
+SHELL = /bin/bash
 
 # Link from our setup
 ifndef configure.mk
 include ../configure.mk
 endif
 
-field:=copersucar
-in:=Mapa_Geral
-
-db/input.${field}_str:
-	${OGR} -overwrite -nln input.${field} -nlt LINESTRING ${in}.shp '${in}'
-	touch $@
+field:=sao-luiz
+in:=Abengoa_27_05_2013/ABSL
 
 db/input.${field}:
-#	${OGR} -overwrite -nln input.${field} -nlt MULTIPOLYGON ${in}.shp '${in}'
+	${OGR} -overwrite -nln input.${field} -nlt MULTIPOLYGON ${in}.shp '$(notdir ${in})'
+	[[ -d $(dir $@) ]] || mkdir $(dir $@)
 	touch $@
 
-db/${field}.carb.fields: db/input.${field}
-	${PG} -f ${field}.sql
+db/carb.fields: db/input.${field}
+	${PG} --variable=field=${field} -f ${field}.sql
 	touch $@
 
 # Run in grass ~/projects/sugarcane/modis/MCD45A1
@@ -32,4 +30,4 @@ ${field}.csv:
 	done > $@
 
 ${field}.kml: ${field}.csv
-	${PG} -f ../to_kml.sql
+	cat ../to_kml.sql | sed -e 's/:field/${field}/g' | ${PG} -f -
