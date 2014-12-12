@@ -30,10 +30,26 @@ h13v11.2012.09.01.fire.csv:%.fire.csv:
 	g.region rast=$*
 	r.stats -1 -g -x  $* | grep -v ' 0$$' | grep -v ' 10000$$' | grep -v ' 999.$$' > $@
 
+burned_pixels.csv:blocks:=h09v07 h12v10 h12v11 h13v10 h13v11 
+burned_pixels.csv:years:=2011 2012 2013
+burned_pixels.csv:
+	echo 'modis_id,year,month,east,north,doy' > $@
+	for b in ${blocks}; do for y in ${years} ; do \
+	 for m in `seq -f '%02g' 1 12`; do \
+	  eval `g.findfile element=cellhd file=$${b}.$${y}.$${m}.01`;\
+	  echo $${name};\
+	  g.region rast=$${name}; \
+	  r.stats -1 -c -g fs=',' input=$${name} | grep -v ',0$$' | grep -v ',900$$' | grep -v ',999.$$' | grep -v ',10000$$' | sed "s/^/$${b},$${y},$${m},/" >> burned_pixels.csv; \
+	 done; done; done
+
 url:=http://ngdc.noaa.gov/eog/data/viirs_fire
 test:
 	for d in `seq -f '%02g'  02 30`; \
 	  do echo $d; \
 	  curl -O ${url}/viirs-ir-sources-201209${d}.csv; \
 	done
+
+burned_2013.kml:
+	${PG} -c "\COPY (select kml.file(kml.feature('Document',folder)) from burned_kml_folders where modis_id is null and year=2013) to $* with csv quote '|'"
+        perl -i -p -e 's/^\|//; s/\|$$//' $@
 

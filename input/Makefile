@@ -2,13 +2,20 @@
 # run by specifing the input  make in=foo
 SHELL := /bin/bash
 
+# MODIFIABLE Parameters
+ifdef field.srs
+S_SRS:=-s_srs ${field.srs} -a_srs ${field.srs}
+else
+S_SRS:=
+endif
+
 # OGR parameters
 OGR:=ogr2ogr -f "PostgreSQL" PG:"dbname=sugarcane"
 PG:=psql -d sugarcane
 
 #DEFAULTS
-years:=2011 2012
-years_glob:=201[12]
+years:=2012 2013
+years_glob:=201[123]
 field:=$(firstword $(subst ., ,${in}))
 date:=$(lastword $(subst ., ,${in}))
 
@@ -23,14 +30,23 @@ INFO::
 input:${in}/input.${field}
 
 ifeq (${field.data.type},SHP)
+
 ${in}/input.${field}:
-#	${OGR} -overwrite -nln input.${field} -nlt MULTIPOLYGON ${field.data}.shp '$(notdir ${field.data})'
-	${OGR} --config SHAPE_ENCODING "ISO-8859-2" -overwrite -nln input.${field} -nlt MULTIPOLYGON ${in}/${field.data}.shp '$(notdir ${field.data})' > $@
+#	${OGR} ${S_SRS} -overwrite -nln input.${field} -nlt MULTIPOLYGON ${field.data}.shp '$(notdir ${field.data})'
+	${OGR} --config SHAPE_ENCODING "ISO-8859-2" ${S_SRS} -overwrite -nln input.${field} -nlt MULTIPOLYGON ${in}/${field.data}.shp '$(notdir ${field.data})' > $@
+	${PG} -c '\d input.${field}' >> $@
+	${PG} -c 'select count(*) from input.${field}' >> $@
+
+else 
+ifeq (${field.data.type},KML)
+${in}/input.${field}:
+	${OGR} --config SHAPE_ENCODING "ISO-8859-2" ${S_SRS} -overwrite -nln input.${field} -nlt MULTIPOLYGON ${in}/${field.data}.kml '$(notdir ${field.data})'
 	${PG} -c '\d input.${field}' >> $@
 	${PG} -c 'select count(*) from input.${field}' >> $@
 else
 ${in}/input.${field}:
 	@echo "Don't know field.data.type: ${field.data.type}"
+endif
 endif
 
 .PHONY::carb.fields

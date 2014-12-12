@@ -16,7 +16,7 @@ ymd:=$(foreach y,${years},$(patsubst %,$y-%-01,${months}))
 ftp:=http://e4ftl01.cr.usgs.gov/MOTA
 mod:=MCD45A1
 ver:=005
-scenes:=h12v10 h12v11 h13v11 h13v10
+scenes:=h12v10 h12v11 h13v11 h13v10 h09v07
 
 .PHONY:${mod}
 define GETMOD

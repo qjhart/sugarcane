@@ -1,4 +1,4 @@
-\set buffer 150
+--\set buffer 150
 
 truncate carb.fields restart identity cascade;
 with i as (
@@ -17,6 +17,7 @@ st_union(
 )
 from i group by name;
 
+select 'buffer size:'||:buffer;
 select count(*) from carb.fields; 
 
 truncate carb.fields_modis;

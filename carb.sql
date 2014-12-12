@@ -3,7 +3,7 @@ create schema carb;
 set search_path=carb,public;
 
 create table fields (
-       field_id varchar(64) primary key,
+       field_id varchar(254) primary key,
        unmodified boolean,
        boundary geometry('MultiPolygon',96842),
        buffered geometry('MultiPolygon',96842)
