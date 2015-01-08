@@ -1,43 +1,48 @@
-// qjhart.sugarcane - features
-// This example shows that GEOJson is a good method of preserving Array types
-// for processing.
-
+// qjhart.sugarcane - get images
 var field_table='ft:1yOtZapVUFdyy4MvwEbEjK20LnE7ZRCJaCizLIyTY';
 var farm='adedcoagro_monta_alegre';
-var year=2013;
- 
+var yr=2013;
+
 // Get Field polygons
 var fields = ee.FeatureCollection(field_table)
   .filter(ee.Filter().and(
     ee.Filter().eq('farm',farm),
-    ee.Filter().eq('year',year)));
- 
-fields=fields.set('dates',[]);
- 
+    ee.Filter().eq('year',yr)));
+
+fields=fields.set('dates',ee.List.repeat(0,0));
+
 fields=fields.map(function(f){
-  return f.set('cloud',[1,2,3],
-               'nbi',[4,5,6]);
+  return f.set(
+    'area',f.geometry().area(),
+    'cloud',ee.List.repeat(0,0),
+    'nbi',ee.List.repeat(0,0));
 });
- 
-fields=fields.map(function(f){
-  var c=ee.List(f.get('cloud'));
-  c=c.add(50.5);
-  return f.set('cloud',c,
-  'nbi',[1]);
-});
- 
-//print(fields.getInfo());
-Map.centerObject(fields);
-addToMap(fields,{color:"004400"});
-// In this case you can get a quick Download URL for your data....
-print(fields.getDownloadURL("json"));
-// Or you can export it as a Task
-Export.table(fields,'ExampleFields',
-  {
-//      "gmeProjectId":"Sugarcane",
-//      "gmeAttributionName":"qjhart@gmail.com",
-//      "gmeAssetName":"fields",
-      "driveFileNamePrefix":"sugarcane_fields",
-      "driveFolder":"EarthEngine",
-      "fileFormat":"GeoJSON"
+
+// Given a set of regions, and a particular year
+// Return appropriate Landsat8 Scenes 
+// filtered to the year and region
+function get_nbi(regions,year) {
+var yL8 = ee.ImageCollection('LC8_L1T_TOA')
+    .filterDate(new Date(year,1,1),new Date(year,12,31))
+    .filterBounds(regions);
+
+// Now we are creating a new Collection of images that create
+// our normalized burn index for every scene in the collection.
+// We also use Google's built in Cloud cover algorythm.
+var nbi=yL8.map(function(img){
+  var nbi=img.normalizedDifference(['B5','B7']).select([0],['nbi']);
+  var nw=ee.Algorithms.SimpleLandsatCloudScore(img).select(['cloud']);
+  return nw.addBands(nbi);
   });
+return nbi;
+}
+
+// Get your nbi
+var all=get_nbi(fields,yr);
+var nbi=all.select('nbi').median().clip(fields);
+print (all.getInfo());
+
+Map.centerObject(fields,12);
+addToMap(fields,{color:"004400"});
+addToMap(nbi);
+
