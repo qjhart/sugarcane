@@ -8,10 +8,10 @@ endif
 
 modis.mk:=1
 
-years:=2011 2012 2013
+#years:=2011 2012 2013
+years:=2014
 months:=01 02 03 04 05 06 07 08 09 10 11 12
 ymd:=$(foreach y,${years},$(patsubst %,$y-%-01,${months}))
-#ymd:=2012-06-01 2012-07-01
 #ftp:=http://e4ftl01.cr.usgs.gov/MODIS_Composites/MOTA
 ftp:=http://e4ftl01.cr.usgs.gov/MOTA
 mod:=MCD45A1

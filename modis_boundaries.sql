@@ -26,7 +26,7 @@ select $1,$2,
 string_to_array(curl_l(base||'/'||name||'/'||
 regexp_replace($2::text,'-','.','g')||'/'),E'\n') 
 from products where product_id=$1
-$$ LANGUAGE 'SQL';
+$$ LANGUAGE SQL;
 
 with f as (
  select product_id,date,unnest(files) as file 

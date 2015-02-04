@@ -42,7 +42,7 @@ from
  where modis_id=$1
 ) as f
 where val=1;
-$$ LANGUAGE 'SQL';
+$$ LANGUAGE SQL;
 
 create table field_modis_pixels (
        field_modis_pixel_id serial primary key,

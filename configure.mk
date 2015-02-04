@@ -63,6 +63,7 @@ endif
 # database, so we need to add it in here.  It is the contiguous albers
 # equal area projection.  ESRI uses the folloinwg code for the
 # projection.
+
 srid:=102004
 srid-prj:=PROJCS["USA_Contiguous_Lambert_Conformal_Conic",GEOGCS["GCS_North_American_1983",DATUM["D_North_American_1983",SPHEROID["GRS_1980",6378137,298.257222101]],PRIMEM["Greenwich",0],UNIT["Degree",0.017453292519943295]],PROJECTION["Lambert_Conformal_Conic"],PARAMETER["False_Easting",0],PARAMETER["False_Northing",0],PARAMETER["Central_Meridian",-96],PARAMETER["Standard_Parallel_1",33],PARAMETER["Standard_Parallel_2",45],PARAMETER["Latitude_Of_Origin",39],UNIT["Meter",1]]
 srid-url:=http://spatialreference.org/ref/esri/${srid}/postgis/
@@ -74,7 +75,10 @@ srid-url:=http://spatialreference.org/ref/esri/${srid}/postgis/
 INFO::
 	@echo This is the configure makefile
 	@echo src:=${src}
-	@echo srid:=${srid}	
+
+srid:
+	# MODIS Sinusoidal
+	curl http://spatialreference.org/ref/sr-org/6842/postgis/ | ${PG}
 
 define fetch_zip 
 	[[ -f ${down}/$2 ]] || ( cd ${down}; wget $1/$2; unzip $2 )
