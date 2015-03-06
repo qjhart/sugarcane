@@ -25,6 +25,27 @@ fields=fields.map(function(f){
   return f.set('cloud',c,
   'nbi',[1]);
 });
+
+// A mapping from a standard name to the sensor-specific bands.
+var LC8_BANDS = ['B2',   'B3',    'B4',  'B5',  'B6',    'B7',    'B10'];
+var STD_NAMES = ['blue', 'green', 'red', 'nir', 'swir1', 'swir2', 'temp'];
+
+// List of Landsat Images used.
+var yL8 = ee.ImageCollection('LC8_L1T_TOA')
+    .filterDate(new Date(year,1,1),new Date(year,12,31))
+    .filterBounds(fields);
+  
+//print(yL8.getInfo());
+
+// Compute the Cloud Cover and NBI
+var all=yL8.map(function(img){
+  var nbi=img.normalizedDifference(['B5','B7']).select([0],['nbi']);
+  var nw=ee.Algorithms.SimpleLandsatCloudScore(img).select(['cloud']);
+  return nw.addBands(nbi);
+  });
+
+print (all.getInfo());
+
  
 //print(fields.getInfo());
 Map.centerObject(fields);
