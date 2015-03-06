@@ -1,0 +1,136 @@
+	<Style id="bufField_n">
+		<LineStyle>
+			<color>ff113610</color>
+		</LineStyle>
+		<PolyStyle>
+			<color>8c4c9e32</color>
+			<outline>0</outline>
+		</PolyStyle>
+	</Style>
+	<Style id="bufField_h">
+		<LineStyle>
+			<color>ff113610</color>
+		</LineStyle>
+		<PolyStyle>
+			<color>8c4c9e32</color>
+			<outline>0</outline>
+		</PolyStyle>
+	</Style>
+	<StyleMap id="bufField">
+		<Pair>
+			<key>normal</key>
+			<styleUrl>#bufField_n</styleUrl>
+		</Pair>
+		<Pair>
+			<key>highlight</key>
+			<styleUrl>#bufField_h</styleUrl>
+		</Pair>
+	</StyleMap>
+	<Style id="fieldBurn_n">
+		<LineStyle>
+			<color>ff213e84</color>
+		</LineStyle>
+		<PolyStyle>
+			<color>a31a4fda</color>
+		</PolyStyle>
+	</Style>
+	<Style id="fieldBurn_h">
+		<LineStyle>
+			<color>ff213e84</color>
+		</LineStyle>
+		<PolyStyle>
+			<color>a31a4fda</color>
+		</PolyStyle>
+	</Style>
+	<StyleMap id="fieldBurn">
+		<Pair>
+			<key>normal</key>
+			<styleUrl>#fieldBurn_n</styleUrl>
+		</Pair>
+		<Pair>
+			<key>highlight</key>
+			<styleUrl>#fieldBurn_h</styleUrl>
+		</Pair>
+	</StyleMap>
+	<Style id="pixelModis_n">
+		<LineStyle>
+			<color>b8e7cbb9</color>
+		</LineStyle>
+		<PolyStyle>
+			<color>a32d1b9e</color>
+			<fill>0</fill>
+		</PolyStyle>
+	</Style>
+	<Style id="pixelModis_h">
+		<LineStyle>
+			<color>b8e7cbb9</color>
+		</LineStyle>
+		<PolyStyle>
+			<color>a32d1b9e</color>
+			<fill>0</fill>
+		</PolyStyle>
+	</Style>
+	<StyleMap id="pixelModis">
+		<Pair>
+			<key>normal</key>
+			<styleUrl>#pixelModis_n</styleUrl>
+		</Pair>
+		<Pair>
+			<key>highlight</key>
+			<styleUrl>#pixelModis_h</styleUrl>
+		</Pair>
+	</StyleMap>
+	<Style id="fieldIn_n">
+		<LineStyle>
+			<color>ff113610</color>
+		</LineStyle>
+		<PolyStyle>
+			<color>8c4c9e32</color>
+			<fill>0</fill>
+		</PolyStyle>
+	</Style>
+	<Style id="fieldIn_h">
+		<LineStyle>
+			<color>ff113610</color>
+		</LineStyle>
+		<PolyStyle>
+			<color>8c4c9e32</color>
+			<fill>0</fill>
+		</PolyStyle>
+	</Style>
+	<StyleMap id="fieldIn">
+		<Pair>
+			<key>normal</key>
+			<styleUrl>#fieldIn_n</styleUrl>
+		</Pair>
+		<Pair>
+			<key>highlight</key>
+			<styleUrl>#fieldIn_h</styleUrl>
+		</Pair>
+	</StyleMap>
+	<Style id="pixelBurn_n">
+		<LineStyle>
+			<color>ff190a52</color>
+		</LineStyle>
+		<PolyStyle>
+			<color>a32d1b9e</color>
+		</PolyStyle>
+	</Style>
+	<Style id="pixelBurn_h">
+		<LineStyle>
+			<color>ff190a52</color>
+		</LineStyle>
+		<PolyStyle>
+			<color>a32d1b9e</color>
+		</PolyStyle>
+	</Style>
+	<StyleMap id="pixelBurn">
+		<Pair>
+			<key>normal</key>
+			<styleUrl>#pixelBurn_n</styleUrl>
+		</Pair>
+		<Pair>
+			<key>highlight</key>
+			<styleUrl>#pixelBurn_h</styleUrl>
+		</Pair>
+	</StyleMap>

@@ -1,0 +1,96 @@
+I can't see how I made the masks.  Sad face.  I replicated for missing h09v07 with this in postgres
+
+sugarcane=# create temp table foo as select x,y,field_id,c,r,modis_id,year,vals from carb.field_modis_pixels limit 0;
+sugarcane=# \COPY foo from modis_pixels.csv with csv header
+sugarcane=# create temp table bar as with f as (select distinct x,y,year,unnest(vals) as v from foo) select x,y,count(*)-2 from f where v<9000 group by x,y;
+sugarcane=# \COPY bar to ~/h09v07.csv with csv
+
+Then in Grass: (mapset quinn)
+g.region rast=h09v07.2011.01.01@MCD45A1
+r.in.xyz input=~/h09v07.csv  output=h09v07.mask method=n type="FCELL" x=1 y=2 z=3 zscale=1 percent=100 fs=','
+
+
+## Buffer creation
+
+It would be nice for us to be able to compare our results with a set
+of MODIS pixels that are about the same number, and similar, but did
+not burn.  The way we are trying to do that is to run a buffer around
+the burned pixels, and then use those as our control.  We can create
+the buffered pixels locations with this:
+
+```{sql}
+create table buffer_pixels as
+with u as (
+ select modis_id,year,east-463.3127165 as east,north-463.3127165 as north from burned_pixels union
+ select modis_id,year,east-463.3127165 as east,north+463.3127165 as north from burned_pixels union
+ select modis_id,year,east+463.3127165 as east,north-463.3127165 as north from burned_pixels union
+ select modis_id,year,east+463.3127165 as east,north+463.3127165 as north from burned_pixels
+)
+select u.*
+from u left join burned_pixels b
+on (u.modis_id=b.modis_id and u.year=b.year
+and u.east::integer=b.east::integer
+and u.north::integer=b.north::integer)
+where b is null;
+create index buffer_pixels_east_north on buffer_pixels(east,north);
+```
+
+This finds buffer pixels ( Just the four N,S,E and W) that are not burned.
+This gives us a good set of comparison points.
+
+```{sql}
+with b as (
+ select year,modis_id,count(*)
+ from buffer
+ group by year,modis_id
+),
+p as (
+ select year,modis_id,count(*)
+ from burned_pixels
+ group by year,modis_id
+)
+select
+year,modis_id,b.count as buffer,p.count as burned
+from b join p using (year,modis_id) order by year,modis_id; 
+```
+
+ year | modis_id | buffer | burned
+ ------+----------+--------+--------
+  2011 | h09v07   |  24374 |  16178
+  2011 | h12v10   |  76402 | 106351
+  2011 | h12v11   | 150736 | 164471
+  2011 | h13v10   | 169728 | 238474
+  2011 | h13v11   |  58816 |  45788
+  2012 | h09v07   |  16318 |  10484
+  2012 | h12v10   | 115368 | 266453
+  2012 | h12v11   | 111924 | 111974
+  2012 | h13v10   | 284826 | 492467
+  2012 | h13v11   |  54038 |  44435
+  2013 | h09v07   |  32954 |  24704
+  2013 | h12v10   |  68104 |  85690
+  2013 | h12v11   | 124986 | 116454
+  2013 | h13v10   |  88858 |  82463
+  2013 | h13v11   |  36964 |  22967
+  2014 | h09v07   |  16940 |  11787
+  2014 | h12v10   |  92668 | 116223
+  2014 | h12v11   |  57294 |  41085
+  2014 | h13v10   | 205070 | 225013
+  2014 | h13v11   |  55984 |  46079
+
+```{sql}
+drop table buffer_boundary;
+create table buffer_boundary as
+ select distinct east,north,
+ st_setsrid(st_envelope(st_makebox2d(
+  st_makepoint(east-(463.31271653/2),north-(463.31271653/2)),
+  st_makepoint(east+(463.31271653/2),north+(463.31271653/2)))),
+  96842) as boundary
+ from buffer_pixels;
+create index buffer_boundary_east_north on buffer_boundary(east,north);
+create index buffer_boundary_boundary on buffer_boundary USING GIST(boundary);
+```
+
+Now we can get those buffers like so:
+```{sql}
+select modis_id,year,st_asKML(boundary) as boundary from buffer_pixels join buffer_boundary using (east,north) where modis_id='h09v07' and year=2014;
+```
