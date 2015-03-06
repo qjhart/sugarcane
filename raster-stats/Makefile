@@ -31,7 +31,7 @@ h13v11.2012.09.01.fire.csv:%.fire.csv:
 	r.stats -1 -g -x  $* | grep -v ' 0$$' | grep -v ' 10000$$' | grep -v ' 999.$$' > $@
 
 burned_pixels.csv:blocks:=h09v07 h12v10 h12v11 h13v10 h13v11 
-burned_pixels.csv:years:=2011 2012 2013
+burned_pixels.csv:years:=2011 2012 2013 2014
 burned_pixels.csv:
 	echo 'modis_id,year,month,east,north,doy' > $@
 	for b in ${blocks}; do for y in ${years} ; do \
@@ -51,5 +51,5 @@ test:
 
 burned_2013.kml:
 	${PG} -c "\COPY (select kml.file(kml.feature('Document',folder)) from burned_kml_folders where modis_id is null and year=2013) to $* with csv quote '|'"
-        perl -i -p -e 's/^\|//; s/\|$$//' $@
+	perl -i -p -e 's/^\|//; s/\|$$//' $@
 
