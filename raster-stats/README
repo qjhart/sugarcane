@@ -92,5 +92,5 @@ create index buffer_boundary_boundary on buffer_boundary USING GIST(boundary);
 
 Now we can get those buffers like so:
 ```{sql}
-select modis_id,year,st_asKML(boundary) as boundary from buffer_pixels join buffer_boundary using (east,north) where modis_id='h09v07' and year=2014;
+\COPY (select modis_id,year,st_asKML(boundary) as boundary from buffer_pixels join buffer_boundary using (east,north) where modis_id='h09v07' and year=2014) to ~/h09v07_2014_buffer.csv with csv header
 ```
