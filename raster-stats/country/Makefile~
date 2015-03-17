@@ -1,9 +1,0 @@
-#! /usr/bin/make
-
-countries:=CRA BRA
-zips:=$(patsubst %,%.zip,${countries})
-
-zipfile:url:=http://biogeo.ucdavis.edu/data/gadm2/shp/CRI_adm.zip
-
-$(patsubst %,%.zip,${countries}):%_adm.zip:
-	wget http://biogeo.ucdavis.edu/data/gadm2/shp/$*_adm.zip
