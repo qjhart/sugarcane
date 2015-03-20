@@ -69,7 +69,7 @@ order by modis,year,doy;
 create or replace view masked_stats_crosstab as
 select * from crosstab (
 'select doy,modis||year,count from masked_stats_histogram order by 1',
-'select distinct modis||year from masked_stats_histogram') 
+'select distinct modis||year from masked_stats_histogram order by 1') 
 as 
 (doy int,
 h12v112010 int,h12v112011 int,h12v112012 int,h12v112013 int,h12v112014 int,
@@ -84,6 +84,7 @@ east float,
 north float,
 doy integer
 );
+create index burned_pixels_east_north on burned_pixels(east,north);
 \COPY burned_pixels(modis_id,year,month,east,north,doy) from burned_pixels.csv with csv header
 
 create or replace view bp_stats as 
@@ -95,7 +96,7 @@ group by modis_id,year,doy;
 create or replace view bp_stats_crosstab as
 select * from crosstab (
 'select doy,modis_id||year,count from bp_stats order by 1',
-'select distinct modis_id||year from bp_stats') 
+'select distinct modis_id||year from bp_stats order by 1') 
 as 
 (doy int, 
 h09v072010 int,h09v072011 int,h09v072012 int,h09v072013 int,h09v072014 int,
