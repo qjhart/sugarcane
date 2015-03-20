@@ -1,0 +1,476 @@
+{
+  "viewport": {
+    "zoom": 12,
+    "lat": -20.503948244939387,
+    "lng": -48.18223714828491
+  },
+  "name": "",
+  "classmodel": [
+    {
+      "name": "2013",
+      "color": "d63000"
+    },
+    {
+      "name": "Untitled Class 2",
+      "color": "98ff00"
+    },
+    {
+      "name": "Untitled Class 3",
+      "color": "0B4A8B"
+    },
+    {
+      "name": "Untitled Class 4",
+      "color": "ffc82d"
+    },
+    {
+      "name": "Untitled Class 5",
+      "color": "00ffff"
+    }
+  ],
+  "polylayers": [
+    {
+      "title": "Fusion Table: ahb-2013",
+      "originaltitle": null,
+      "overlayvisible": true,
+      "layermode": "advisory-mode",
+      "datatype": "table",
+      "mapping": [
+        [
+          2013,
+          0
+        ]
+      ],
+      "id": "1yOtZapVUFdyy4MvwEbEjK20LnE7ZRCJaCizLIyTY",
+      "class_column": "year",
+      "geometry_column": "boundary"
+    },
+    {
+      "title": "Fusion Table: 2013 MODIS Burned Pixels H13V11",
+      "originaltitle": null,
+      "overlayvisible": true,
+      "layermode": "advisory-mode",
+      "datatype": "table",
+      "mapping": [
+        [
+          1,
+          1
+        ],
+        [
+          2,
+          1
+        ],
+        [
+          3,
+          1
+        ],
+        [
+          4,
+          2
+        ],
+        [
+          5,
+          2
+        ],
+        [
+          6,
+          2
+        ],
+        [
+          7,
+          3
+        ],
+        [
+          8,
+          3
+        ],
+        [
+          9,
+          3
+        ],
+        [
+          10,
+          4
+        ],
+        [
+          11,
+          4
+        ],
+        [
+          12,
+          4
+        ]
+      ],
+      "id": "1qKxvXnVbSkQTwK-Cw2tKb4wPCimsVbjjyodW6E5T",
+      "class_column": "month",
+      "geometry_column": "boundary"
+    }
+  ],
+  "datalayers": [
+    {
+      "title": "Delta NBR",
+      "originaltitle": "Computed layer: Expression",
+      "overlayvisible": true,
+      "vis": {
+        "opacity": 1,
+        "bands": [
+          "B5"
+        ],
+        "max": 7,
+        "palette": [
+          "000000",
+          "091cff",
+          "29d7ff",
+          "60ff98",
+          "d7ff97",
+          "fbffc0",
+          "ff8367",
+          "ff2d0b",
+          "ffffff"
+        ],
+        "format": "png"
+      },
+      "layermode": "advisory-mode",
+      "datatype": "computed",
+      "computations": [
+        {
+          "title": "1. Custom Expression",
+          "operation": "Expression",
+          "layers": {
+            "A": {
+              "image": {
+                "type": "Invocation",
+                "arguments": {
+                  "id": "LC8_L1T_8DAY_TOA/20131117"
+                },
+                "functionName": "Image.load"
+              },
+              "bands": [
+                "B5",
+                "B7"
+              ],
+              "title": "After (Nov2013)"
+            }
+          },
+          "expression": "(A['B5']-A['B7'])/(A['B5']+A['B7'])"
+        },
+        {
+          "title": "2. Custom Expression",
+          "operation": "Expression",
+          "layers": {
+            "B": {
+              "image": {
+                "type": "Invocation",
+                "arguments": {
+                  "id": "LC8_L1T_8DAY_TOA/20130423"
+                },
+                "functionName": "Image.load"
+              },
+              "bands": [
+                "B5",
+                "B7"
+              ],
+              "title": "Before (Apr2013)"
+            }
+          },
+          "expression": "(B['B5']-B['B7'])/(B['B5']+B['B7'])"
+        },
+        {
+          "title": "3. Custom Expression",
+          "operation": "Expression",
+          "layers": {
+            "A": {
+              "image": 0,
+              "bands": [
+                "B5"
+              ],
+              "title": "1. Custom Expression"
+            },
+            "B": {
+              "image": 1,
+              "bands": [
+                "B5"
+              ],
+              "title": "2. Custom Expression"
+            }
+          },
+          "expression": "B[0]-A[0]"
+        },
+        {
+          "title": "4. Threshold",
+          "operation": "Threshold",
+          "layer": {
+            "image": 2,
+            "bands": [
+              "B5"
+            ],
+            "title": "3. Custom Expression"
+          },
+          "thresholds": [
+            {
+              "low": -100,
+              "high": -0.25,
+              "output": 0
+            },
+            {
+              "low": -0.25,
+              "high": -0.1,
+              "output": 1
+            },
+            {
+              "low": -0.1,
+              "high": 0.1,
+              "output": 2
+            },
+            {
+              "low": 0.1,
+              "high": 0.27,
+              "output": 3
+            },
+            {
+              "low": 0.27,
+              "high": 0.44,
+              "output": 4
+            },
+            {
+              "low": 0.44,
+              "high": 0.66,
+              "output": 5
+            },
+            {
+              "low": 0.66,
+              "high": 1,
+              "output": 6
+            },
+            {
+              "low": 1,
+              "high": 100,
+              "output": 7
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "title": "Before NBR",
+      "originaltitle": "Computed layer: Expression",
+      "overlayvisible": false,
+      "vis": {
+        "opacity": 1,
+        "bands": [
+          "B5",
+          "B5",
+          "B5"
+        ],
+        "gamma": 1,
+        "format": "png"
+      },
+      "layermode": "advisory-mode",
+      "datatype": "computed",
+      "computations": [
+        {
+          "title": "1. Custom Expression",
+          "operation": "Expression",
+          "layers": {
+            "B": {
+              "image": {
+                "type": "Invocation",
+                "arguments": {
+                  "id": "LC8_L1T_8DAY_TOA/20130423"
+                },
+                "functionName": "Image.load"
+              },
+              "bands": [
+                "B1",
+                "B2",
+                "B3",
+                "B4",
+                "B5",
+                "B6",
+                "B7",
+                "B8",
+                "B9",
+                "B10",
+                "B11",
+                "BQA"
+              ],
+              "title": "Before (Apr2013)"
+            }
+          },
+          "expression": "(B['B5']-B['B7'])/(B['B5']+B['B7'])"
+        }
+      ]
+    },
+    {
+      "title": "After NBR",
+      "originaltitle": "Computed layer: Expression",
+      "overlayvisible": false,
+      "vis": {
+        "opacity": 1,
+        "bands": [
+          "B5",
+          "B5",
+          "B5"
+        ],
+        "gamma": 1,
+        "format": "png"
+      },
+      "layermode": "advisory-mode",
+      "datatype": "computed",
+      "computations": [
+        {
+          "title": "1. Custom Expression",
+          "operation": "Expression",
+          "layers": {
+            "A": {
+              "image": {
+                "type": "Invocation",
+                "arguments": {
+                  "id": "LC8_L1T_8DAY_TOA/20131117"
+                },
+                "functionName": "Image.load"
+              },
+              "bands": [
+                "B5",
+                "B7"
+              ],
+              "title": "After (Nov2013)"
+            }
+          },
+          "expression": "(A['B5']-A['B7'])/(A['B5']+A['B7'])"
+        }
+      ]
+    },
+    {
+      "title": "After (Nov2013)",
+      "originaltitle": "Landsat 8 8-Day TOA Reflectance Composite",
+      "overlayvisible": false,
+      "vis": {
+        "opacity": 1,
+        "bands": [
+          "B7",
+          "B5",
+          "B2"
+        ],
+        "max": 0.51,
+        "gamma": 1,
+        "name": "True Color (432)"
+      },
+      "layermode": "advisory-mode",
+      "datatype": "temporalcollection",
+      "periodstart": 1384646400000,
+      "periodend": 1385337600000,
+      "id": "LANDSAT/LC8_L1T_8DAY_TOA",
+      "assetid": "LANDSAT/LC8_L1T_8DAY_TOA/20131117"
+    },
+    {
+      "title": "Before (Apr2013)",
+      "originaltitle": "Landsat 8 8-Day TOA Reflectance Composite",
+      "overlayvisible": false,
+      "vis": {
+        "opacity": 1,
+        "bands": [
+          "B7",
+          "B5",
+          "B2"
+        ],
+        "max": 0.51,
+        "gamma": 1,
+        "name": "True Color (432)"
+      },
+      "layermode": "advisory-mode",
+      "datatype": "temporalcollection",
+      "periodstart": 1366675200000,
+      "periodend": 1367366400000,
+      "id": "LANDSAT/LC8_L1T_8DAY_TOA",
+      "assetid": "LANDSAT/LC8_L1T_8DAY_TOA/20130423"
+    },
+    {
+      "title": "NBR on TOA",
+      "originaltitle": "Computed layer: Expression",
+      "overlayvisible": false,
+      "vis": {
+        "opacity": 1,
+        "bands": [
+          "B5",
+          "B5",
+          "B5"
+        ],
+        "gamma": 1,
+        "format": "png"
+      },
+      "layermode": "advisory-mode",
+      "datatype": "computed",
+      "computations": [
+        {
+          "title": "1. Custom Expression",
+          "operation": "Expression",
+          "layers": {
+            "A": {
+              "image": {
+                "type": "Invocation",
+                "arguments": {
+                  "id": "LC8_L1T_8DAY_TOA/20130618"
+                },
+                "functionName": "Image.load"
+              },
+              "bands": [
+                "B1",
+                "B2",
+                "B3",
+                "B4",
+                "B5",
+                "B6",
+                "B7",
+                "B8",
+                "B9",
+                "B10",
+                "B11",
+                "BQA"
+              ],
+              "title": "TOA (Jun18th)"
+            }
+          },
+          "expression": "(A['B5']-A['B7'])/(A['B5']+A['B7'])"
+        }
+      ]
+    },
+    {
+      "title": "TOA (Jun18th)",
+      "originaltitle": "Landsat 8 8-Day TOA Reflectance Composite",
+      "overlayvisible": false,
+      "vis": {
+        "opacity": 1,
+        "bands": [
+          "B7",
+          "B5",
+          "B2"
+        ],
+        "max": 0.51,
+        "gamma": 1,
+        "name": "True Color (432)"
+      },
+      "layermode": "advisory-mode",
+      "datatype": "temporalcollection",
+      "periodstart": 1371513600000,
+      "periodend": 1372204800000,
+      "id": "LANDSAT/LC8_L1T_8DAY_TOA",
+      "assetid": "LANDSAT/LC8_L1T_8DAY_TOA/20130618"
+    }
+  ],
+  "drawnpoints": [
+    [],
+    [],
+    [],
+    [],
+    []
+  ],
+  "drawnpolys": [
+    [],
+    [],
+    [],
+    [],
+    []
+  ],
+  "analysis": null
+}
+

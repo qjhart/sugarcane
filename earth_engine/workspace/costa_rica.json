@@ -1,0 +1,533 @@
+{
+  "viewport": {
+    "zoom": 13,
+    "lat": 10.471143071171808,
+    "lng": -85.4862928390503
+  },
+  "name": "",
+  "classmodel": [
+    {
+      "name": "Sugarcane Fields",
+      "color": "2fd63c"
+    },
+    {
+      "name": "2013",
+      "color": "98ff00"
+    },
+    {
+      "name": "2014",
+      "color": "0B4A8B"
+    }
+  ],
+  "polylayers": [
+    {
+      "title": "Fusion Table: MODIS h09v07 Burned Pixels for 2013 and 2014",
+      "originaltitle": null,
+      "overlayvisible": true,
+      "layermode": "advisory-mode",
+      "datatype": "table",
+      "mapping": [
+        [
+          2013,
+          1
+        ]
+      ],
+      "id": "1APDkvLOsSoKH5YqyQzZX4M6yPjJ-dg6RQrwcMXLI",
+      "class_column": "year",
+      "geometry_column": "kml"
+    },
+    {
+      "title": "Fusion Table: Catsa Costa Rica",
+      "originaltitle": null,
+      "overlayvisible": false,
+      "layermode": "advisory-mode",
+      "datatype": "table",
+      "mapping": [
+        [
+          1,
+          0
+        ],
+        [
+          2,
+          0
+        ],
+        [
+          3,
+          0
+        ],
+        [
+          4,
+          0
+        ],
+        [
+          5,
+          0
+        ],
+        [
+          20,
+          0
+        ]
+      ],
+      "id": "1Dm3K3ufEA9jStKca0jxS5h4Nf0hyGgPI3i1eO6kt",
+      "class_column": "zona",
+      "geometry_column": "boundary"
+    }
+  ],
+  "datalayers": [
+    {
+      "title": "BARC",
+      "originaltitle": "Computed layer: Expression",
+      "overlayvisible": true,
+      "vis": {
+        "opacity": 1,
+        "bands": [
+          "B6"
+        ],
+        "min": -0.463765025138855,
+        "max": 0.7312938570976257,
+        "gamma": 1,
+        "format": "png"
+      },
+      "layermode": "advisory-mode",
+      "datatype": "computed",
+      "computations": [
+        {
+          "title": "1. Custom Expression",
+          "operation": "Expression",
+          "layers": {
+            "B": {
+              "image": {
+                "type": "CompoundValue",
+                "scope": [
+                  [
+                    "0",
+                    {
+                      "type": "Invocation",
+                      "arguments": {
+                        "value": 0
+                      },
+                      "functionName": "Image.constant"
+                    }
+                  ],
+                  [
+                    "1",
+                    {
+                      "type": "Invocation",
+                      "arguments": {
+                        "image": {
+                          "type": "ValueRef",
+                          "value": "0"
+                        },
+                        "mask": {
+                          "type": "ValueRef",
+                          "value": "0"
+                        }
+                      },
+                      "functionName": "Image.mask"
+                    }
+                  ],
+                  [
+                    "2",
+                    {
+                      "type": "Invocation",
+                      "arguments": {
+                        "id": "LANDSAT/LC8_L1T_8DAY_TOA/20131219"
+                      },
+                      "functionName": "Image.load"
+                    }
+                  ],
+                  [
+                    "3",
+                    [
+                      "B1",
+                      "B2",
+                      "B3",
+                      "B4",
+                      "B5",
+                      "B6",
+                      "B7",
+                      "B8",
+                      "B9",
+                      "B10",
+                      "B11",
+                      "BQA"
+                    ]
+                  ],
+                  [
+                    "4",
+                    {
+                      "type": "Invocation",
+                      "arguments": {
+                        "input": {
+                          "type": "ValueRef",
+                          "value": "2"
+                        },
+                        "bandSelectors": {
+                          "type": "ValueRef",
+                          "value": "3"
+                        }
+                      },
+                      "functionName": "Image.select"
+                    }
+                  ],
+                  [
+                    "5",
+                    [
+                      "DEFAULT_EXPRESSION_IMAGE",
+                      "i"
+                    ]
+                  ],
+                  [
+                    "6",
+                    {
+                      "type": "Invocation",
+                      "arguments": {
+                        "expression": "(i[5]-i[7])/(i[5]+i[7])",
+                        "argName": "DEFAULT_EXPRESSION_IMAGE",
+                        "vars": {
+                          "type": "ValueRef",
+                          "value": "5"
+                        }
+                      },
+                      "functionName": "Image.parseExpression"
+                    }
+                  ],
+                  [
+                    "7",
+                    {
+                      "type": "Invocation",
+                      "arguments": {
+                        "DEFAULT_EXPRESSION_IMAGE": {
+                          "type": "ValueRef",
+                          "value": "1"
+                        },
+                        "i": {
+                          "type": "ValueRef",
+                          "value": "4"
+                        }
+                      },
+                      "function": {
+                        "type": "ValueRef",
+                        "value": "6"
+                      }
+                    }
+                  ]
+                ],
+                "value": {
+                  "type": "ValueRef",
+                  "value": "7"
+                }
+              },
+              "bands": [
+                "B6"
+              ],
+              "title": "L8 2013-12 NBI"
+            },
+            "A": {
+              "image": {
+                "type": "CompoundValue",
+                "scope": [
+                  [
+                    "0",
+                    {
+                      "type": "Invocation",
+                      "arguments": {
+                        "value": 0
+                      },
+                      "functionName": "Image.constant"
+                    }
+                  ],
+                  [
+                    "1",
+                    {
+                      "type": "Invocation",
+                      "arguments": {
+                        "image": {
+                          "type": "ValueRef",
+                          "value": "0"
+                        },
+                        "mask": {
+                          "type": "ValueRef",
+                          "value": "0"
+                        }
+                      },
+                      "functionName": "Image.mask"
+                    }
+                  ],
+                  [
+                    "2",
+                    {
+                      "type": "Invocation",
+                      "arguments": {
+                        "id": "LANDSAT/LC8_L1T_8DAY_TOA/20140125"
+                      },
+                      "functionName": "Image.load"
+                    }
+                  ],
+                  [
+                    "3",
+                    [
+                      "B1",
+                      "B2",
+                      "B3",
+                      "B4",
+                      "B5",
+                      "B6",
+                      "B7",
+                      "B8",
+                      "B9",
+                      "B10",
+                      "B11",
+                      "BQA"
+                    ]
+                  ],
+                  [
+                    "4",
+                    {
+                      "type": "Invocation",
+                      "arguments": {
+                        "input": {
+                          "type": "ValueRef",
+                          "value": "2"
+                        },
+                        "bandSelectors": {
+                          "type": "ValueRef",
+                          "value": "3"
+                        }
+                      },
+                      "functionName": "Image.select"
+                    }
+                  ],
+                  [
+                    "5",
+                    [
+                      "DEFAULT_EXPRESSION_IMAGE",
+                      "i"
+                    ]
+                  ],
+                  [
+                    "6",
+                    {
+                      "type": "Invocation",
+                      "arguments": {
+                        "expression": "(i[5]-i[7])/(i[5]+i[7])",
+                        "argName": "DEFAULT_EXPRESSION_IMAGE",
+                        "vars": {
+                          "type": "ValueRef",
+                          "value": "5"
+                        }
+                      },
+                      "functionName": "Image.parseExpression"
+                    }
+                  ],
+                  [
+                    "7",
+                    {
+                      "type": "Invocation",
+                      "arguments": {
+                        "DEFAULT_EXPRESSION_IMAGE": {
+                          "type": "ValueRef",
+                          "value": "1"
+                        },
+                        "i": {
+                          "type": "ValueRef",
+                          "value": "4"
+                        }
+                      },
+                      "function": {
+                        "type": "ValueRef",
+                        "value": "6"
+                      }
+                    }
+                  ]
+                ],
+                "value": {
+                  "type": "ValueRef",
+                  "value": "7"
+                }
+              },
+              "bands": [
+                "B6"
+              ],
+              "title": "L8 2014-02 NBI"
+            }
+          },
+          "expression": "A-B"
+        }
+      ]
+    },
+    {
+      "title": "L8 2013-12 NBI",
+      "originaltitle": "Computed layer: Expression",
+      "overlayvisible": false,
+      "vis": {
+        "opacity": 1,
+        "bands": [
+          "B6"
+        ],
+        "min": -1,
+        "gamma": 1,
+        "format": "png"
+      },
+      "layermode": "advisory-mode",
+      "datatype": "computed",
+      "computations": [
+        {
+          "title": "1. Custom Expression",
+          "operation": "Expression",
+          "layers": {
+            "i": {
+              "image": {
+                "type": "Invocation",
+                "arguments": {
+                  "id": "LANDSAT/LC8_L1T_8DAY_TOA/20131219"
+                },
+                "functionName": "Image.load"
+              },
+              "bands": [
+                "B1",
+                "B2",
+                "B3",
+                "B4",
+                "B5",
+                "B6",
+                "B7",
+                "B8",
+                "B9",
+                "B10",
+                "B11",
+                "BQA"
+              ],
+              "title": "L8 2013-12"
+            }
+          },
+          "expression": "(i[5]-i[7])/(i[5]+i[7])"
+        }
+      ]
+    },
+    {
+      "title": "L8 2014-02 NBI",
+      "originaltitle": "Computed layer: Expression",
+      "overlayvisible": false,
+      "vis": {
+        "opacity": 1,
+        "bands": [
+          "B6"
+        ],
+        "min": -1,
+        "gamma": 1,
+        "format": "png"
+      },
+      "layermode": "advisory-mode",
+      "datatype": "computed",
+      "computations": [
+        {
+          "title": "1. Custom Expression",
+          "operation": "Expression",
+          "layers": {
+            "i": {
+              "image": {
+                "type": "Invocation",
+                "arguments": {
+                  "id": "LANDSAT/LC8_L1T_8DAY_TOA/20140125"
+                },
+                "functionName": "Image.load"
+              },
+              "bands": [
+                "B1",
+                "B2",
+                "B3",
+                "B4",
+                "B5",
+                "B6",
+                "B7",
+                "B8",
+                "B9",
+                "B10",
+                "B11",
+                "BQA"
+              ],
+              "title": "L8 2014-02"
+            }
+          },
+          "expression": "(i[5]-i[7])/(i[5]+i[7])"
+        }
+      ]
+    },
+    {
+      "title": "L8 2014-02 False Color",
+      "originaltitle": "Landsat 8 8-Day TOA Reflectance Composite",
+      "overlayvisible": true,
+      "vis": {
+        "opacity": 1,
+        "bands": [
+          "B7",
+          "B5",
+          "B3"
+        ],
+        "min": 0.03272826969623566,
+        "max": 0.40935975313186646,
+        "gamma": 1.0250000000000001
+      },
+      "layermode": "advisory-mode",
+      "datatype": "temporalcollection",
+      "periodstart": 1390608000000,
+      "periodend": 1391299200000,
+      "id": "LANDSAT/LC8_L1T_8DAY_TOA",
+      "assetid": "LANDSAT/LC8_L1T_8DAY_TOA/20140125"
+    },
+    {
+      "title": "L8 2013-12",
+      "originaltitle": "Landsat 8 8-Day TOA Reflectance Composite",
+      "overlayvisible": false,
+      "vis": {
+        "opacity": 1,
+        "bands": [
+          "B4",
+          "B3",
+          "B2"
+        ],
+        "max": 0.51,
+        "gamma": 1
+      },
+      "layermode": "advisory-mode",
+      "datatype": "temporalcollection",
+      "periodstart": 1387411200000,
+      "periodend": 1388102400000,
+      "id": "LANDSAT/LC8_L1T_8DAY_TOA",
+      "assetid": "LANDSAT/LC8_L1T_8DAY_TOA/20131219"
+    },
+    {
+      "title": "L8 2014-02",
+      "originaltitle": "Landsat 8 8-Day TOA Reflectance Composite",
+      "overlayvisible": false,
+      "vis": {
+        "opacity": 1,
+        "bands": [
+          "B4",
+          "B3",
+          "B2"
+        ],
+        "max": 0.51,
+        "gamma": 1
+      },
+      "layermode": "advisory-mode",
+      "datatype": "temporalcollection",
+      "periodstart": 1390608000000,
+      "periodend": 1391299200000,
+      "id": "LANDSAT/LC8_L1T_8DAY_TOA",
+      "assetid": "LANDSAT/LC8_L1T_8DAY_TOA/20140125"
+    }
+  ],
+  "drawnpoints": [
+    [],
+    [],
+    []
+  ],
+  "drawnpolys": [
+    [],
+    [],
+    []
+  ],
+  "analysis": null
+}
