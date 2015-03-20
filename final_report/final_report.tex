@@ -1,0 +1,773 @@
+\documentclass[]{article}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage{amssymb,amsmath}
+\usepackage{ifxetex,ifluatex}
+\usepackage{fixltx2e} % provides \textsubscript
+% use upquote if available, for straight quotes in verbatim environments
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
+\ifnum 0\ifxetex 1\fi\ifluatex 1\fi=0 % if pdftex
+  \usepackage[utf8]{inputenc}
+\else % if luatex or xelatex
+  \ifxetex
+    \usepackage{mathspec}
+    \usepackage{xltxtra,xunicode}
+  \else
+    \usepackage{fontspec}
+  \fi
+  \defaultfontfeatures{Mapping=tex-text,Scale=MatchLowercase}
+  \newcommand{\euro}{€}
+\fi
+% use microtype if available
+\IfFileExists{microtype.sty}{\usepackage{microtype}}{}
+\usepackage{longtable,booktabs}
+\ifxetex
+  \usepackage[setpagesize=false, % page size defined by xetex
+              unicode=false, % unicode breaks when used with xetex
+              xetex]{hyperref}
+\else
+  \usepackage[unicode=true]{hyperref}
+\fi
+\hypersetup{breaklinks=true,
+            bookmarks=true,
+            pdfauthor={},
+            pdftitle={},
+            colorlinks=true,
+            citecolor=blue,
+            urlcolor=blue,
+            linkcolor=magenta,
+            pdfborder={0 0 0}}
+\urlstyle{same}  % don't use monospace font for urls
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{6pt plus 2pt minus 1pt}
+\setlength{\emergencystretch}{3em}  % prevent overfull lines
+\setcounter{secnumdepth}{0}
+
+\author{}
+\date{}
+
+\begin{document}
+
+\section{Sugarcane Field Burning}\label{sugarcane-field-burning}
+
+\subsection{Final Report Quinn Hart
+2015-03-15}\label{final-report-quinn-hart-2015-03-15}
+
+This proposal developed an automated method to determine how much
+sugarcane harvesting was burned as compared to mechanical harvesting.
+The basic idea is that sugarcane farm boundaries are input into the
+system, and the amount of burning over those regions are calculated.
+This proposal primarily uses the MODIS burned area product (MCD45A1) as
+a simple method of determining the amount of burning occurring during
+the harvesting.
+
+Tasks for the project included: * Application and Development *
+Automated Report Generation * 2013 and 2014 MODIS Burn Summary Maps *
+Evaluation Support * Cloud-based Processing Evaluation
+
+\subsection{Application and
+  Development}\label{application-and-development}
+
+We developed core processing for the sugarcane fields, and provided data
+to CARB. From those input data, we developed a workflow, which processed
+these data, and provided detailed reports for the sugarcane processes,
+and summaries of the burning. We provided CARB with all the MODIS pixels
+used in the image processing. CARB has reviewed and approved the
+methodology and the reports generated in this application development.
+
+We have provided the source code for the project, in an open repository
+(https://github.com/qjhart/sugarcane). The code is executed primarily in
+PostGIS, and open source spatial database; and Grass, an open source GIS
+tool which is used to process the raster imagery. The repository
+includes all the code needed to create and maintain the GRASS database,
+and to process the requests and create the output KML summarizations.
+
+Further information is available for the 
+\href{Application\%20Development}{Application Development}
+
+\subsection{Automated Report
+Generation}\label{automated-report-generation}
+
+We have delivered burn summary maps, allowing CARB will be able to
+process incoming request in-house. However, we continued to support
+automated summary generation to allow CARB the ability to compare their
+results with UC Davis results. More detailed information regarding can
+be found regarding the
+\href{Automated\%20Report\%20Generation}{Automated Report Generation}.
+
+\subsubsection{Deliverables}\label{deliverables}
+
+\begin{itemize}
+\itemsep1pt\parskip0pt\parsep0pt
+\item
+  CARB submitted a number of new sugarcane fields in a mutually
+  agreeable format. UCD processed the fields and returned automatically
+  generated reports in the form of KML files.
+\item
+  The service was maintained for the duration of the project.
+\item
+  The summaries included a table of estimates of acreage burned on a
+  per-field basis.
+\end{itemize}
+
+\subsection{2013 and 2014 MODIS Burn Summary
+Maps}\label{and-2014-modis-burn-summary-maps}
+
+We provided Burned Area Summary map for years 2011,2012, 2013, and 2014,
+for the regions originally proposed, as well as an extension to those
+regions based on additional field processing requests. These maps
+provide the basis for CARB to develop in-house processing of sugarcane
+burn requests.
+
+\subsubsection{Deliverables:}\label{deliverables-1}
+
+\begin{itemize}
+\itemsep1pt\parskip0pt\parsep0pt
+\item
+  We delivered a number of maps showing all the MODIS derived burned
+  area pixels, in a vector-based format. Each polygon corresponds to a
+  MODIS pixel, and includes a summary of the day(s) of year the burn
+  occurred.
+\end{itemize}
+
+\subsection{Evaluation Support}\label{evaluation-support}
+
+UC Davis supported a number of expanded evaluation of the generated
+results. In particular, to support CARB's burned area claims, UC Davis
+compared MODIS derived product to similar products derived from higher
+resolution imagery, most notably Landsat 7 and Landsat 8. UC Davis
+provided evaluation as requested.
+
+\paragraph{Deliverables:}\label{deliverables-2}
+
+UC Davis provided three extended evaluation support reports.
+
+\begin{itemize}
+\itemsep1pt\parskip0pt\parsep0pt
+\item
+  \href{Destilaria\%20Alcidia}{Destilaria Alcidia}
+\item
+  \href{Jalles\%20Machado}{Jalles Machado}
+\item
+  \href{Monta\%20Alegre}{Monta Alegre}
+\end{itemize}
+
+These were supplied to CARB for the purposes of validating CARB's
+original Burn summary evaluations. They included higher resolution
+imagery and value added products to support or moderate CARB's original
+MODIS based assessment, and a description of the processes used
+
+\subsection{Cloud-based Processing
+Evaluation}\label{cloud-based-processing-evaluation}
+
+UC Davis will investigate additional cloud-based processing environments
+for alternative evaluation methods of burned area detection. The
+advantage of using a cloud based solution is that it eliminates the
+current requirement of locally processing satellite data, which is a
+burden for continued efforts by CARB. Additionally, it provides a path
+to updating the processing methodology for new satellite sourced data.
+UC Davis will investigate Google's Earth Engine processing environment
+as potential platform for new detection methodologies.
+
+\subsection{Deliverables:}\label{deliverables-3}
+
+\begin{itemize}
+\itemsep1pt\parskip0pt\parsep0pt
+\item
+  UC Davis will investigate Earth Engine as a potential platform for
+  sugar-cane burning detection.
+\item
+  UC Davis will include some higher resolution (eg. Landsat) imagery in
+  it's investigations.
+\item
+  UC Davis will investigate potential scripting methods to automate the
+  evaluation.
+\end{itemize}
+
+\section{Methodology Overview}\label{methodology-overview}
+
+\begin{itemize}
+\itemsep1pt\parskip0pt\parsep0pt
+\item
+  Get Field List
+\item
+  Verify the fields are correct
+\item
+  Get a map of what was burned
+\item
+  Determine which fields were burned
+\item
+  Summarize the total number of fields
+\item
+  Compare to reported values
+\item
+  Adjust appropriately
+\end{itemize}
+
+\subsection{MODIS MCD45A1 Product}\label{modis-mcd45a1-product}
+
+The MODIS Burned area product (MCD45A1) describes the day that a
+particular pixel was burned throughout the year. In addition to the burn
+date, the product includes: a qualitative estimate of the confidence of
+the pixel; how many passes were detected; a coarse classification of the
+land cover type of pixel (including cloud cover); and an indication of
+how long during each month clouds continuously obscured the surface. The
+burned product determines fires by detecting rapid changes in bands most
+affected by burning vegetation. The change compares with pixels are over
+the course of about 2 weeks, so areas under clouds can eventually be
+detected. Changes are thresholded at a certain level, and there is not
+an estimate on the extent of the burning in the pixel.
+
+500m x 500m Daily Overpass SWIR vs.~Red Compare temporally Monthly
+Product Get a product of day(s) pixel burned
+
+\section{Automated Report
+Generation}\label{automated-report-generation-1}
+
+UC Davis was asked to process 34 separate farm applications. The
+majority of these in the São Paulo State of Brazil, but also other
+states, and one request for Costa Rica. In total there were about
+135,000 individual fields included in the processing. \emph{Table P.1}
+includes an overview of the processing included.
+
+\emph{Table P.1:} Processing Overview
+
+\begin{longtable}[c]{@{}llll@{}}
+\toprule\addlinespace
+identifier & Country & State & Number Fields 
+\\\addlinespace
+\midrule\endhead
+\toprule\addlinespace
+adecoagro\_monte\_alegre & BRA & Minas Gerais & 265
+\\\addlinespace
+alta\_mogiana & BRA & São Paulo & 1389
+\\\addlinespace
+alto\_alegre\_junqueira & BRA & Paraná & 6116
+\\\addlinespace
+biosev\_lem & BRA & São Paulo & 2926
+\\\addlinespace
+biosev\_sel & BRA & São Paulo & 5061
+\\\addlinespace
+biosev\_umb & BRA & São Paulo & 2663
+\\\addlinespace
+biosev\_vro & BRA & Minas Gerais & 5
+\\\addlinespace
+biosev\_vro & BRA & São Paulo & 7558
+\\\addlinespace
+bunge\_frutal & BRA & Mato Grosso do Sul & 207
+\\\addlinespace
+bunge\_frutal & BRA & Minas Gerais & 1970
+\\\addlinespace
+bunge\_ouroeste & BRA & São Paulo & 5821
+\\\addlinespace
+cargill\_mosaico & BRA & Minas Gerais & 119
+\\\addlinespace
+cargill\_mosaico & BRA & São Paulo & 2968
+\\\addlinespace
+catsa\_costa\_rica & CRI & Guanacaste & 1467
+\\\addlinespace
+conquista\_do\_pontal & BRA & São Paulo & 241
+\\\addlinespace
+copersucar & BRA & Minas Gerais & 4804
+\\\addlinespace
+copersucar\_cerradao & BRA & Minas Gerais & 4146
+\\\addlinespace
+destilaria\_alcidia & BRA & São Paulo & 88
+\\\addlinespace
+itb & BRA & Goiás & 2958
+\\\addlinespace
+itt & BRA & Minas Gerais & 5348
+\\\addlinespace
+jalles\_machado & BRA & Goiás & 518
+\\\addlinespace
+meridiano & BRA & São Paulo & 3145
+\\\addlinespace
+noble\_meridiano & BRA & São Paulo & 3145
+\\\addlinespace
+noble\_potireendaba & BRA & São Paulo & 3524
+\\\addlinespace
+odebrecht\_alto\_taquari & BRA & Mato Grosso & 70
+\\\addlinespace
+parceria & BRA & São Paulo & 2141
+\\\addlinespace
+propia & BRA & São Paulo & 782
+\\\addlinespace
+raizen\_costapinto & BRA & São Paulo & 224
+\\\addlinespace
+renuka & BRA & São Paulo & 23848
+\\\addlinespace
+santa\_candida & BRA & São Paulo & 3907
+\\\addlinespace
+sao\_joao & BRA & São Paulo & 3201
+\\\addlinespace
+sao\_luiz & BRA & São Paulo & 9342
+\\\addlinespace
+sao\_martinho & BRA & São Paulo & 4597
+\\\addlinespace
+solazyme & BRA & Minas Gerais & 522
+\\\addlinespace
+solazyme & BRA & São Paulo & 8217
+\\\addlinespace
+usm & BRA & São Paulo & 4652
+\\\addlinespace
+usmshp & BRA & São Paulo & 4597
+\\\addlinespace
+vista\_alegre & BRA & Mato Grosso do Sul & 2321
+\\\addlinespace
+\bottomrule
+\end{longtable}
+
+Table P.2 shows the two countries, and the States involved in
+processing. São Paulo showed most requests, but five other states had
+some processing requests.
+
+\emph{Table P.2:} Countries and States included in sugarcane field
+processing.
+
+\begin{longtable}[c]{@{}lll@{}}
+\toprule\addlinespace
+Country & State & Fields
+\\\addlinespace
+\midrule\endhead
+BRA & Goiás & 3476
+\\\addlinespace
+BRA & Mato Grosso & 70
+\\\addlinespace
+BRA & Mato Grosso do Sul & 2528
+\\\addlinespace
+BRA & Minas Gerais & 17179
+\\\addlinespace
+BRA & Paraná & 6116
+\\\addlinespace
+BRA & São Paulo & 104037
+\\\addlinespace
+CRI & Guanacaste & 1467
+\\\addlinespace
+\bottomrule
+\end{longtable}
+
+These included 4 seperate MODIS tiles that were included in the
+processing. The MODIS tile extents, country and State boundaries, and
+boundaries of the individual processing requests are shown in Figures
+P.1 and P.2.
+
+{[}{[} processing/bra.png \textbar{} width=700px {]}{]} \textbar{} ---
+\textbar{} \emph{Figure P.1:} Brazil Processing Overview \textbar{}
+
+{[}{[} processing/cri.png \textbar{} width=700px {]}{]} \textbar{} ---
+\textbar{} \emph{Figure P.2:} Costa Rica Processing Overview \textbar{}
+
+\section{Jalles Machado}\label{jalles-machado}
+
+UCD was asked to investigate the extent of particular sugarcane fields
+for Jalles Machado, as the MODIS evaluation potentially suggested
+burning outside of the designated fields.
+
+Evaluation of the area apparently shows an uncontrolled fire to the
+north of the fields of interest. The fire is estimated at 10-15 sq km,
+through an area that is more hilly, with some native vegetation. That
+fire occurred at approximately the same time as some of the fields
+identified as burned also burned.
+
+\subsection{Introduction}\label{introduction}
+
+The following request was given to UCD.
+
+\begin{quote}
+With regards to the Jalles Machado evaluation, and the burn pixels
+detected during August 2014 (see screenshot below), is it possible to
+obtain historic imagery for the same pixels (pre-2013)? John Courtis is
+interested in the history, because it appears that the Company may be
+engaged in land clearing for cultivation / expansion. Else, it could be
+sugarcane straw / litter burn at the edge of the fields. In any case,
+the Company claims that it was an accidental event with the fire
+spreading to their Cristalina farms for which a police complaint was
+filed by a motorist travelling near the farms. We want to make sure
+there is no history to their claim.
+\end{quote}
+
+\subsection{Landsat8 Investigation}\label{landsat8-investigation}
+
+Landsat 8 imagery was used to investigate the area before and after the
+detected burn. \emph{Figure 2.} Shows the fields of interest with a
+false color Landsat image right before the burn.
+
+\begin{longtable}[c]{@{}ll@{}}
+\toprule\addlinespace
+{[}{[} overview.png \textbar{} width=400px {]}{]} & {[}{[} over.png
+\textbar{} width=400px {]}{]}
+\\\addlinespace
+\midrule\endhead
+\emph{Figure 1.} MODIS burns & \emph{Figure 2.} Location of Fields
+\\\addlinespace
+\bottomrule
+\end{longtable}
+
+\emph{Figures 3. and 4.} Show the same image, without the superimposed
+fields, for the time before and after the fire. This false color image
+uses (SWIR) for red, (NIR) for green, and (RED) for blue. In this
+configuration, vegetation appears green, soil brown, and burned area
+dark and purplish. Examination of these images already give a good
+indication of the fire that occurred and it's extent.
+
+\begin{longtable}[c]{@{}ll@{}}
+\toprule\addlinespace
+{[}{[} pre.png \textbar{} width=400px {]}{]} & {[}{[} post.png
+\textbar{} width=400px {]}{]}
+\\\addlinespace
+\midrule\endhead
+\emph{Figure 3.} Prefire false Color image & \emph{Figure 4.} Postfire
+false Color image
+\\\addlinespace
+\bottomrule
+\end{longtable}
+
+\emph{Figures 5. and 6.} Show the normalized burn index (NBI) for the
+same region and the same times. NBI is a normalized relationship between
+the SWIR and the NIR Landsat bands. This relationship shows areas that
+are likely to have been burned. Typically, the index is composed to show
+fire scars as dark.
+
+\begin{longtable}[c]{@{}ll@{}}
+\toprule\addlinespace
+{[}{[} pre\_nbi.png \textbar{} width=400px {]}{]} & {[}{[} post\_nbi.png
+\textbar{} width=400px {]}{]}
+\\\addlinespace
+\midrule\endhead
+\emph{Figure 5.} Prefire NBI & \emph{Figure 6.} Postfire NBI
+\\\addlinespace
+\bottomrule
+\end{longtable}
+
+Finally, \emph{Figures 7. and 8.} show the difference between these NBI
+values. The darker area for the fire is not an indication of a more
+severe burn necessarily, as the area started out greener, with a higher
+NBI.
+
+\begin{longtable}[c]{@{}ll@{}}
+\toprule\addlinespace
+{[}{[} w\_barc.png \textbar{} width=400px {]}{]} & {[}{[}
+w\_barc\_fields.png \textbar{} width=400px {]}{]}
+\\\addlinespace
+\midrule\endhead
+\emph{Figure 7.} NBI Difference & \emph{Figure 8.} NBI Difference with
+fields
+\\\addlinespace
+\bottomrule
+\end{longtable}
+
+\subsection{Adedcoagro Monta Alegre -
+2014-09-02}\label{adedcoagro-monta-alegre---2014-09-02}
+
+For some farm regions, the MODIS (MCD45A1) Based Burned area detection,
+underpredicts the reported burning for the Aldecoagro Monte Alegre
+farms, for 2013. We investigate a Landsat approach, and look to the
+process of automating a Landsat based approach for this. For this
+example, we look at all the Landsat 8 imagerty for the region (Landsat 8
+commenced in Apr, but probably captures most of the burning for this
+region). As a quick test, we will compare the Normalized Burn Ratio for
+two dates, before and after the harvesting season. We calculate the
+Delta NBR between the dates, and Threshold these into the classes as
+defined above.
+
+\begin{longtable}[c]{@{}lll@{}}
+\toprule\addlinespace
+Landsat 8-day TOA Composite & Cloudy & Use
+\\\addlinespace
+\midrule\endhead
+Apr 23, 2013 - May 1, 2013 & No & Start
+\\\addlinespace
+May 9, 2013 - May 17, 2013 & No
+\\\addlinespace
+May 25, 2013 - Jun 2, 2013 & Very
+\\\addlinespace
+Jun 10, 2013 - Jun 18, 2013 & No
+\\\addlinespace
+Jun 26, 2013 - Jul 4, 2013 & Very
+\\\addlinespace
+Jul 12, 2013 - Jul 20, 2013 & No
+\\\addlinespace
+Jul 28, 2013 - Aug 5, 2013 & No
+\\\addlinespace
+Aug 13, 2013 - Aug 21, 2013 & Very
+\\\addlinespace
+Aug 29, 2013 - Sep 6, 2013 & No
+\\\addlinespace
+Sep 14, 2013 - Sep 22, 2013 & Yes
+\\\addlinespace
+Sep 30, 2013 - Oct 8, 2013 & Yes
+\\\addlinespace
+Oct 16, 2013 - Oct 24, 2013 & Partly
+\\\addlinespace
+Nov 1, 2013 - Nov 9, 2013 & Yes
+\\\addlinespace
+Nov 17, 2013 - Nov 25, 2013 & No & End
+\\\addlinespace
+Dec 3, 2013 - Dec 11, 2013 & Partly (Scattered)
+\\\addlinespace
+Dec 19, 2013 - Dec 27, 2013 & Yes
+\\\addlinespace
+Jan 1, 2014 - Jan 9, 2014 & Partly (Scattered)
+\\\addlinespace
+\bottomrule
+\end{longtable}
+
+The following images show the comparison of the before and after burned
+regions for part of the Monta ALegre farms. This area was chosen as it
+has the highest variation in the DeltaNBR, and shows fields that are
+both being harvested and fields that are growing back in 2013.
+
+\begin{longtable}[c]{@{}lll@{}}
+\toprule\addlinespace
+Overview and Delta NBR & 2013-04-23 & 2013-11-17
+\\\addlinespace
+\midrule\endhead
+{[}{[} overview.png \textbar{} width=200px {]}{]} & {[}{[} true04.png
+\textbar{} width=200px {]}{]} & {[}{[} true11.png \textbar{} width=200px
+{]}{]}{[}{[} burned.png \textbar{} width=200px {]}{]}
+\\\addlinespace
+\bottomrule
+\end{longtable}
+
+A comparison with the MODIS MCD45A Burned area product does not show a
+strong correlation with areas with High Delta NBR. This is unexpected,
+as the MCD45A product also uses a comparison of NIR and SWIR bands as
+it's method of discerning burned areas. The region above doens't contain
+and MODIS burned pixels, the example below compares the MCD45A MODIS
+burned pixels with the Delta NBR for close region. Only a small subset
+of the High Delta NBR areas are included, and the MCD45A product also
+identifies areas for which the delta NBR is low, (Eg in the lower left
+of the image.)
+
+\begin{longtable}[c]{@{}lll@{}}
+\toprule\addlinespace
+Fields & Burns & Composite
+\\\addlinespace
+\midrule\endhead
+{[}{[} fusion.png \textbar{} width=200px {]}{]} & {[}{[}
+burn\_mosaic.png \textbar{} width=200px {]}{]} & {[}{[}
+burn\_mosaic\_fields.png \textbar{} width=200px {]}{]}
+\\\addlinespace
+\bottomrule
+\end{longtable}
+
+\subsection{Example from one Field}\label{example-from-one-field}
+
+The before burning data is Jun 18th, and the Post date is July 4th.
+Although we see a difference in the brightness of the fields post
+harvest, the normalized versions do not show much difference. This seems
+to indicate that we are not seeing the difference between a harvested
+and burned field. If we jump to September 6th, we see the color of the
+fields become similar. I think what are seeing in this case is maybe a
+defoliant (or lack of water) in Jun prior to Harvest.
+
+\begin{longtable}[c]{@{}llll@{}}
+\toprule\addlinespace
+Date & True Color (432) & False Color (752) & NBR
+\\\addlinespace
+\midrule\endhead
+06-18 & {[}{[} true-06-18.png \textbar{} width=200px {]}{]} & {[}{[}
+fc-06-18.png \textbar{} width=200px {]}{]} & {[}{[}nbr-06-18.png
+\textbar{} width=200px {]}{]}
+\\\addlinespace
+07-04 & {[}{[} true-07-04.png \textbar{} width=200px {]}{]} & {[}{[}
+fc-07-04.png \textbar{} width=200px {]}{]} & {[}{[}nbr-07-04.png
+\textbar{} width=200px {]}{]}
+\\\addlinespace
+09-06 & {[}{[} true-09-06.png \textbar{} width=200px {]}{]} & {[}{[}
+fc-09-06.png \textbar{} width=200px {]}{]} & {[}{[}nbr-09-06.png
+\textbar{} width=200px {]}{]}
+\\\addlinespace
+\bottomrule
+\end{longtable}
+
+Destilaria Alcidia - January 23rd, 2014
+
+The MODIS based Burned area detection algorithm is based on discovering
+changes in the spectral characteristics of the underlying pixels tuned
+to discover changes related to the addition of charcoal and ash, and the
+removal of vegetation. The MODIS based dataset is used primarily for
+it's ease of use in determining burned areas, as the time of the burn is
+included in the results.
+
+The MODIS based algorithm identified burning in late September and early
+October, as shown in Table 1.
+
+Farm Burn Julian Days Burn Dates Reported Rebuilding 110001 270 Sep 26
+
+\begin{verbatim}
+110007
+267,275
+Sep 23, 
+September
+110013
+281
+Oct 8
+
+
+110025
+267,268,272,275
+Sep 23,24,29, Oct 2
+July
+110039
+275,280,282,289
+Oct 2, 6, 8, 15
+Oct / November
+\end{verbatim}
+
+The investigation below looks primarily at fields 110007,110025 and
+110039 The fields identified as being mis-characterized with respect to
+plantation rebuilding. Field 110136 was shown to burn at an earlier
+date, Mar 11 2012.
+
+Landsat imagery, when looked at temporally, can provide similar insights
+at a finer scale, but a coarser temporal resolution. The following set
+of images describe the changes in the fields, and their classification.
+The red pixels indicate the locations of the MODIS pixels that were used
+as the determining locations of burning. The images are at coarser time
+scales because of the most infrequent visitation of the Landsat
+Satellite, as well a few cloudy days in the time period of interest. For
+Landsat imagery, a false color image, using band 7 (SWIR) as red, can
+indicate (with reddish or purplish colors) and increase in the
+reflectance in the SWIR as related to the NIR (band 4) and red (Band 3).
+This increase is a typical signal for added charcoal and ash. In a
+similar way, the Burned Area Index (BAI) is a red and NIR index which
+compares a surface to the spectral signature of charcoal. In BAI
+imagery, high values indicate a strong correlation to charcoal.
+
+True Color (RGB) False Color (743) Burned Area Index (BAI)
+
+\begin{verbatim}
+Figure showing the changes in RGB, 743, and BAI over the time of observed burning.  The rows indicate dates 2012-08-12, 2012-08-28, 2012-09-13, and 2012-10-31.  The images show an increase in the BAI, and changes in the false color image, 743, consistent with added  charcoal and ash.
+\end{verbatim}
+
+The imagery shows a typical pattern for the the fields of interest. High
+greenness in August, defoliation in late August, possibly due to
+harvesting, and then a later increase in BAI, in September and October.
+This could be related to bare soil alone, or burning, or burning
+followed by clearing of the land.
+
+The farms 1110025 and 110007 show an interesting pattern for the Landsat
+overflight of Sept 19th, 2012. This particular date captures the
+transition from the non-burned to burned identification. The pattern
+seems to start from the North of the fields in an irregular pattern.
+
+\begin{verbatim}
+RGB Image
+Fa743 Image
+  
+
+
+
+BAI
+Panchromatic
+
+
+Figure showing a more detailed image for farms 110025 and 110007, for Sept 19, 2012.  The images indicate irregularly high BAI in the Northern part of the fields.  This anomaly is visible in the BAI, RGB, False color (743), and Panchromatic images.
+\end{verbatim}
+
+\section{Historical Changes in Sugarcane
+burning}\label{historical-changes-in-sugarcane-burning}
+
+Since the project has compiled sugarcane burning maps over the years
+2011-2014, it is possible to investigate some of the changes in burning
+practices over that time. We investigated the changes in burn practices
+for a number of states in Brazil, as well as Costa Rica.
+
+\subsection{Regional Changes}\label{regional-changes}
+
+Table \emph{H.1} Shows the changes in the total number of burned pixels
+for regions where sugarcane fields were processed. Note, that these do
+not necessarily cover the entire regions, but only those that overlapped
+the 5 MODIS tiles used for the overall processing steps. Still, they
+offer good insight into the changes over the last 4 years. The values
+are in terms of individual MODIS pixels, which are about 25 hectares in
+size.
+
+\emph{Table H.1} Changes in the number of burned pixels for 2011 through
+2014.
+
+\begin{verbatim}
+   region       | 2011  |  2012  | 2013  |  2014  
+\end{verbatim}
+
+\begin{longtable}[c]{@{}lllll@{}}
+\toprule\addlinespace
+Goiás & 56497 & 98822 & 20091 & 102923
+\\\addlinespace
+CRI & 471 & 1701 & 1914 & 1944
+\\\addlinespace
+Mato Grosso & 94046 & 196296 & 71184 & 121060
+\\\addlinespace
+Mato Grosso do Sul & 23449 & 67111 & 26282 & 10469
+\\\addlinespace
+Minas Gerais & 49844 & 45858 & 10771 & 42152
+\\\addlinespace
+Paraná & 3522 & 9464 & 5522 & 3831
+\\\addlinespace
+São Paulo & 20144 & 10155 & 5961 & 21716
+\\\addlinespace
+\bottomrule
+\end{longtable}
+
+These changes can be seen in Figure \emph{H.1}. There are a few items to
+note in these data. First, that while there had been a general decrease
+in burning, 2014 showed an increase in burning throughout most regions,
+particularly as compared to 2014.
+
+\emph{Figure H.1} Changes in burning by year
+
+{[}{[}historical/by\_year.png{]}{]}
+
+\subsection{Timing of Burning}\label{timing-of-burning}
+
+We also looked at the average timing of the burning practices. These did
+not change dramatically from year to year. From region to region, Costa
+Rica shows a different schedule than Brazil, Table \emph{H.2}. Figure
+\emph{H.2} shows as an example the trends in the day of year (doy),
+burning for São Paulo. These bell shaped curves are typical for most
+regions, and could be used to determine possible out of season burns
+that might be reconsidered in terms of the estimation of mechanization.
+
+\emph{Table H.2} Average Day of Burning by region
+
+\begin{verbatim}
+   region       | 2011 | 2012 | 2013 | 2014 
+\end{verbatim}
+
+\begin{longtable}[c]{@{}lllll@{}}
+\toprule\addlinespace
+Costa Rica & 91 & 80 & 71 & 74
+\\\addlinespace
+Goiás & 241 & 250 & 240 & 239
+\\\addlinespace
+Mato Grosso & 235 & 238 & 231 & 226
+\\\addlinespace
+Mato Grosso do Sul & 244 & 229 & 240 & 209
+\\\addlinespace
+Minas Gerais & 248 & 261 & 244 & 254
+\\\addlinespace
+Paraná & 232 & 237 & 209 & 135
+\\\addlinespace
+São Paulo & 231 & 234 & 230 & 233
+\\\addlinespace
+\bottomrule
+\end{longtable}
+
+\emph{Figure H.2} Example changes in seasonal burning practices.
+
+\begin{longtable}[c]{@{}ll@{}}
+\toprule\addlinespace
+{[}{[} historical/sao\_paulo.png {]}{]} & {[}{[}
+historical/costa\_rica.png {]}{]}
+\\\addlinespace
+\midrule\endhead
+São Paulo & Costa Rica
+\\\addlinespace
+\bottomrule
+\end{longtable}
+
+A table of all weekly burns for all years is included in the summary
+spreadsheet.
+
+\end{document}

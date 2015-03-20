@@ -1,0 +1,5 @@
+# In .latex.yml
+compiler: pdflatex
+
+root_file: final_report/final_report.tex
+
